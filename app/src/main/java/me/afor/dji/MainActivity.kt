@@ -5,10 +5,12 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
+import com.amap.api.maps2d.AMap
+import com.amap.api.maps2d.MapView
 
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var map: AMap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -28,5 +30,14 @@ class MainActivity : AppCompatActivity() {
                             Manifest.permission.READ_PHONE_STATE), 1)
         }
         setContentView(R.layout.activity_main)
+
+/*        val filter = IntentFilter()
+        filter.addAction(DjiInitializer.FLAG_CONNECTION_CHANGE)
+        registerReceiver(mReceiver, filter)*/
+
+        val mapView = findViewById<MapView>(R.id.map)
+        mapView.onCreate(savedInstanceState)
+        map = mapView.map
+        map.mapType=
     }
 }

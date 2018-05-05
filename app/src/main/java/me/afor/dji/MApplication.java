@@ -7,23 +7,22 @@ import com.secneo.sdk.Helper;
 
 public class MApplication extends MultiDexApplication {
 
-    private DjiInitApplication demoApplication;
+    private DjiInitializer djiInitializer;
 
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         Helper.install(MApplication.this);
-        if (demoApplication == null) {
-            demoApplication = new DjiInitApplication();
-            demoApplication.setContext(this);
+        if (djiInitializer == null) {
+            djiInitializer = new DjiInitializer(this);
         }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        if (demoApplication != null) {
-            demoApplication.onCreate();
+        if (djiInitializer != null) {
+            djiInitializer.onCreate();
         }
     }
 

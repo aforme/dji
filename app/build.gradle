@@ -53,10 +53,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     //    androidTestImplementation 'com.android.support.test:runner:1.0.2'
     //    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation 'com.dji:dji-uxsdk:4.5.1'
-    /*{
-            exclude group: "com.google.android.gms"
-        }*/
+    implementation('com.dji:dji-uxsdk:4.5.1') {
+        exclude group: "com.google.android.gms"
+    }
+    implementation project(":uxsdk-extend")
     compileOnly 'com.dji:dji-sdk-provided:4.5.1'
     //override version
     implementation "com.android.support:recyclerview-v7:$supportVersion"

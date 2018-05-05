@@ -20,7 +20,7 @@ import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
 
 
-public class DjiInitApplication extends Application {
+public class DjiInitializer {
 
     public static final String FLAG_CONNECTION_CHANGE = "uxsdk_demo_connection_change";
 
@@ -30,23 +30,18 @@ public class DjiInitApplication extends Application {
     private BaseProduct.BaseProductListener mDJIBaseProductListener;
     private BaseComponent.ComponentListener mDJIComponentListener;
 
-    private Application instance;
+    private Application application;
 
-    public void setContext(Application application) {
-        instance = application;
-    }
-
-    @Override
     public Context getApplicationContext() {
-        return instance;
+        return application;
     }
 
-    public DjiInitApplication() {
-
+    public DjiInitializer(Application application) {
+        this.application = application;
     }
 
     /**
-     * This function is used to get the instance of DJIBaseProduct.
+     * This function is used to get the application of DJIBaseProduct.
      * If no product is connected, it returns null.
      */
     public static synchronized BaseProduct getProductInstance() {
@@ -56,24 +51,11 @@ public class DjiInitApplication extends Application {
         return mProduct;
     }
 
-    @Override
     public void onCreate() {
-        super.onCreate();
         mHandler = new Handler(Looper.getMainLooper());
 
-        //Check the permissions before registering the application for android system 6.0 above.
-        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int permissionCheck2 = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_PHONE_STATE);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || (permissionCheck == 0 && permissionCheck2 == 0)) {
-
-            //This is used to start SDK services and initiate SDK.
-            DJISDKManager.getInstance().registerApp(getApplicationContext(), mDJISDKManagerCallback);
-        } else {
-            Toast.makeText(getApplicationContext(), "Please check if the permission is granted.", Toast.LENGTH_LONG).show();
-        }
-
         /**
-         * When starting SDK services, an instance of interface DJISDKManager.DJISDKManagerCallback will be used to listen to
+         * When starting SDK services, an application of interface DJISDKManager.DJISDKManagerCallback will be used to listen to
          * the SDK Registration result and the product changing.
          */
         mDJISDKManagerCallback = new DJISDKManager.SDKManagerCallback() {
@@ -90,7 +72,7 @@ public class DjiInitApplication extends Application {
                             Toast.makeText(getApplicationContext(), "Register Success", Toast.LENGTH_LONG).show();
                         }
                     });
-                    loginAccount();
+//                    loginAccount();
 
                 } else {
                     Handler handler = new Handler(Looper.getMainLooper());
@@ -147,11 +129,21 @@ public class DjiInitApplication extends Application {
 
         };
 
+        //Check the permissions before registering the application for android system 6.0 above.
+        int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permissionCheck2 = ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.READ_PHONE_STATE);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || (permissionCheck == 0 && permissionCheck2 == 0)) {
+
+            //This is used to start SDK services and initiate SDK.
+            DJISDKManager.getInstance().registerApp(getApplicationContext(), mDJISDKManagerCallback);
+        } else {
+            Toast.makeText(getApplicationContext(), "Please check if the permission is granted.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void loginAccount() {
 
-        UserAccountManager.getInstance().logIntoDJIUserAccount(this,
+        UserAccountManager.getInstance().logIntoDJIUserAccount(getApplicationContext(),
                 new CommonCallbacks.CompletionCallbackWith<UserAccountState>() {
                     @Override
                     public void onSuccess(final UserAccountState userAccountState) {

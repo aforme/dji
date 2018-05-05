@@ -9,13 +9,32 @@
                 tools:context=".MainActivity">
 
     <!-- Widget to see first person view (FPV) -->
-    <dji.ux.widget.FPVWidget
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
-    <dji.ux.widget.FPVOverlayWidget
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <dji.ux.widget.FPVWidget
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <dji.ux.widget.FPVOverlayWidget
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </FrameLayout>
+
+        <com.amap.api.maps2d.MapView
+            android:id="@+id/map"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
 
     <dji.ux.workflow.CompassCalibratingWorkFlow
         android:layout_width="match_parent"
